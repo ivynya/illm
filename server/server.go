@@ -27,6 +27,7 @@ func main() {
 
 		// Log join message
 		fmt.Println("Client joined from " + c.RemoteAddr().String())
+		fmt.Println("Total clients:", len(clients))
 
 		for {
 			// Read message from client
