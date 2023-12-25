@@ -2,7 +2,7 @@ FROM golang:1.21-alpine AS builder
 WORKDIR /app
 COPY . .
 
-RUN go get -d -v
+RUN go mod download
 RUN go build -o server ./server
 
 EXPOSE 3000
