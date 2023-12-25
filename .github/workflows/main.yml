@@ -17,10 +17,18 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build Docker image
+      - name: Build Docker server image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
+          target: server
           tags: ghcr.io/${{ github.repository }}/server:latest
+      - name: Build Docker client image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          target: client
+          tags: ghcr.io/${{ github.repository }}/client:latest
 
