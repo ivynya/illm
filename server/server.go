@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
@@ -28,6 +29,7 @@ func main() {
 		// Log join message
 		fmt.Println("Client joined from " + c.RemoteAddr().String())
 		fmt.Println("Total clients:", len(clients))
+		c.WriteMessage(websocket.TextMessage, []byte(`{"action":"join","data":"`+strconv.Itoa(len(clients))+`"}`))
 
 		for {
 			// Read message from client
