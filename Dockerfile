@@ -12,4 +12,4 @@ WORKDIR /app
 COPY --from=builder /app/server .
 
 # Run the app when the container launches
-CMD ["server"]
+CMD ["./server"]
