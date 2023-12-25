@@ -29,7 +29,7 @@ func main() {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
 
-	u := url.URL{Scheme: "ws", Host: "localhost:3000", Path: "/aura"}
+	u := url.URL{Scheme: "wss", Host: "io.ivy.direct", Path: "/aura"}
 	log.Printf("connecting to %s", u.String())
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), http.Header{
@@ -94,10 +94,19 @@ func main() {
 		}
 	}()
 
+	ticker := time.NewTicker(time.Second * 45)
+	defer ticker.Stop()
+
 	for {
 		select {
 		case <-done:
 			return
+		case <-ticker.C:
+			err := c.WriteMessage(websocket.TextMessage, []byte("{\"action\": \"ping\"}"))
+			if err != nil {
+				log.Println("write:", err)
+				return
+			}
 		case <-interrupt:
 			log.Println("interrupt")
 

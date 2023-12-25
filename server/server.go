@@ -35,6 +35,7 @@ func main() {
 				log.Println("Websocket read error:", err)
 				break
 			}
+
 			// Disconnect client when it sends something that isnt json
 			if !json.Valid(msg) {
 				log.Println("Invalid JSON")
