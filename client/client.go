@@ -33,7 +33,7 @@ func main() {
 	log.Printf("connecting to %s", u.String())
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), http.Header{
-		"Authorization": []string{"Basic R21XNlhkOHZoVWhLM1hrQVJoNFo="},
+		"Authorization": []string{"Basic aXZ5LWF1cmEtYWRtaW46R21XNlhkOHZoVWhLM1hrQVJoNFo="},
 	})
 	if err != nil {
 		log.Fatal("dial:", err)

@@ -16,7 +16,7 @@ func main() {
 	app := fiber.New()
 	app.Use(basicauth.New(basicauth.Config{
 		Users: map[string]string{
-			"ivy": "GmW6Xd8vhUhK3XkARh4Z",
+			"ivy-aura-admin": "GmW6Xd8vhUhK3XkARh4Z",
 		},
 	}))
 
