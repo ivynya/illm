@@ -61,7 +61,7 @@ func main() {
 			switch req.Action {
 			case "generate":
 				log.Println("generate")
-				llm, err := ollama.New(ollama.WithModel(req.Generate.Model))
+				llm, err := ollama.New(ollama.WithModel(req.Generate.Model), ollama.WithServerURL("http://host.docker.internal:11434"))
 				if err != nil {
 					log.Fatal(err)
 				}
