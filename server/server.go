@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -15,7 +16,7 @@ func main() {
 	app := fiber.New()
 	app.Use(basicauth.New(basicauth.Config{
 		Users: map[string]string{
-			"admin": "password",
+			"ivy": "GmW6Xd8vhUhK3XkARh4Z",
 		},
 	}))
 
@@ -24,6 +25,9 @@ func main() {
 		// Register new client
 		clients[c] = true
 
+		// Log join message
+		fmt.Println("Client joined from " + c.RemoteAddr().String())
+
 		for {
 			// Read message from client
 			_, msg, err := c.ReadMessage()
@@ -31,9 +35,11 @@ func main() {
 				log.Println("Websocket read error:", err)
 				break
 			}
-
-			// Print received message
-			fmt.Println("Message:", string(msg))
+			// Disconnect client when it sends something that isnt json
+			if !json.Valid(msg) {
+				log.Println("Invalid JSON")
+				break
+			}
 
 			// Iterate through all clients
 			for client := range clients {
