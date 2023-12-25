@@ -29,7 +29,9 @@ func main() {
 		// Log join message
 		fmt.Println("Client joined from " + c.RemoteAddr().String())
 		fmt.Println("Total clients:", len(clients))
-		c.WriteMessage(websocket.TextMessage, []byte(`{"action":"join","data":"`+strconv.Itoa(len(clients))+`"}`))
+		for client := range clients {
+			client.WriteMessage(websocket.TextMessage, []byte(`{"action":"join","data":"`+strconv.Itoa(len(clients))+`"}`))
+		}
 
 		for {
 			// Read message from client
@@ -51,12 +53,18 @@ func main() {
 				if err != nil {
 					log.Println("Websocket write error:", err)
 					delete(clients, client)
+					for client := range clients {
+						client.WriteMessage(websocket.TextMessage, []byte(`{"action":"join","data":"`+strconv.Itoa(len(clients))+`"}`))
+					}
 				}
 			}
 		}
 
 		// Unregister client
 		delete(clients, c)
+		for client := range clients {
+			client.WriteMessage(websocket.TextMessage, []byte(`{"action":"join","data":"`+strconv.Itoa(len(clients))+`"}`))
+		}
 	}))
 
 	// Start the server
