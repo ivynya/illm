@@ -105,6 +105,12 @@ func main() {
 			// Tag request with client tag
 			req.Tag = tag
 
+			// If action is identify, broadcast to all providers
+			if req.Action == "identify" {
+				broadcastAll(providers, req)
+				continue
+			}
+
 			// Send request to provider
 			err = broadcastToProvider(providers, req)
 			if err != nil {

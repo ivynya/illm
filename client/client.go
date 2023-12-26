@@ -11,6 +11,12 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+// global environment variables
+var (
+	auth       = os.Getenv("AUTH")
+	identifier = os.Getenv("IDENTIFIER")
+)
+
 func main() {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
@@ -18,7 +24,7 @@ func main() {
 	// authorize to an illm relay as a provider
 	u := url.URL{Scheme: "wss", Host: "io.ivy.direct", Path: "/aura/provider"}
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), http.Header{
-		"Authorization": []string{"Basic aXZ5LWF1cmEtYWRtaW46R21XNlhkOHZoVWhLM1hrQVJoNFo="},
+		"Authorization": []string{"Basic " + auth},
 	})
 	if err != nil {
 		log.Fatal("dial:", err)
@@ -82,6 +88,13 @@ func read(c *websocket.Conn, done chan struct{}) {
 				return
 			}
 			_ = completion
+		case "identify":
+			res, err := encodeRequest(req.Tag, "identify", identifier)
+			if err != nil {
+				log.Println("encode:", err)
+				return
+			}
+			err = c.WriteMessage(websocket.TextMessage, res)
 		}
 	}
 }
