@@ -11,17 +11,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// Request struct
-type Request struct {
-	Action   string `json:"action"`
-	Data     string `json:"data"`
-	Generate struct {
-		Model   string `json:"model"`
-		Prompt  string `json:"prompt"`
-		Context []int  `json:"context,omitempty"`
-	} `json:"generate"`
-}
-
 func main() {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)

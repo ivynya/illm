@@ -2,10 +2,12 @@ package main
 
 import (
 	"encoding/json"
+
+	"github.com/ivynya/illm/internal"
 )
 
-func decodeRequest(message []byte) (*Request, error) {
-	req := &Request{}
+func decodeRequest(message []byte) (*internal.Request, error) {
+	req := &internal.Request{}
 	err := json.Unmarshal(message, &req)
 	if err != nil {
 		return nil, err
@@ -14,7 +16,7 @@ func decodeRequest(message []byte) (*Request, error) {
 }
 
 func encodeRequest(action string, data string) ([]byte, error) {
-	resp := &Request{
+	resp := &internal.Request{
 		Action: action,
 		Data:   data,
 	}

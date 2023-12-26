@@ -5,11 +5,12 @@ import (
 	"log"
 
 	"github.com/gorilla/websocket"
+	"github.com/ivynya/illm/internal"
 	"github.com/ivynya/illm/ollama"
 	"github.com/tmc/langchaingo/llms"
 )
 
-func generate(c *websocket.Conn, req *Request) ([]*llms.Generation, error) {
+func generate(c *websocket.Conn, req *internal.Request) ([]*llms.Generation, error) {
 	llm, err := ollama.New(ollama.WithModel(req.Generate.Model), ollama.WithServerURL("http://host.docker.internal:11434"))
 	if err != nil {
 		log.Fatal(err)
