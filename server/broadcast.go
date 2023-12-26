@@ -67,7 +67,7 @@ func broadcastAll(c map[string]*websocket.Conn, req *internal.Request) bool {
 func broadcastConnectionStats(clients map[string]*websocket.Conn, providers map[string]*websocket.Conn) {
 	retry_remaining := 3
 	ok := true
-	for ok != true && retry_remaining > 0 {
+	for retry_remaining > 0 {
 		ok = ok && broadcastAll(clients, &internal.Request{
 			Action: "clients",
 			Data:   strconv.Itoa(len(clients)),
@@ -76,6 +76,9 @@ func broadcastConnectionStats(clients map[string]*websocket.Conn, providers map[
 			Action: "providers",
 			Data:   strconv.Itoa(len(providers)),
 		})
+		if ok {
+			break
+		}
 		retry_remaining--
 	}
 }
