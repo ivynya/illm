@@ -7,7 +7,6 @@ import (
 
 	"github.com/tmc/langchaingo/callbacks"
 	"github.com/tmc/langchaingo/llms"
-	"github.com/tmc/langchaingo/schema"
 )
 
 var (
@@ -21,11 +20,6 @@ type LLM struct {
 	client           *Client
 	options          options
 }
-
-var (
-	_ llms.LLM           = (*LLM)(nil)
-	_ llms.LanguageModel = (*LLM)(nil)
-)
 
 // New creates a new ollama LLM implementation.
 func New(opts ...Option) (*LLM, error) {
@@ -44,7 +38,7 @@ func New(opts ...Option) (*LLM, error) {
 
 // Call Implement the call interface for LLM.
 func (o *LLM) Call(ctx context.Context, prompt string, options ...llms.CallOption) (string, error) {
-	r, err := o.Generate(ctx, []string{prompt}, options...)
+	r, err := o.Generate(ctx, []string{prompt}, []int{}, options...)
 	if err != nil {
 		return "", err
 	}
@@ -55,7 +49,7 @@ func (o *LLM) Call(ctx context.Context, prompt string, options ...llms.CallOptio
 }
 
 // Generate implemente the generate interface for LLM.
-func (o *LLM) Generate(ctx context.Context, prompts []string, options ...llms.CallOption) ([]*llms.Generation, error) {
+func (o *LLM) Generate(ctx context.Context, prompts []string, chatContext []int, options ...llms.CallOption) ([]*llms.Generation, error) {
 	if o.CallbacksHandler != nil {
 		o.CallbacksHandler.HandleLLMStart(ctx, prompts)
 	}
@@ -92,6 +86,7 @@ func (o *LLM) Generate(ctx context.Context, prompts []string, options ...llms.Ca
 			Prompt:   prompt,
 			Template: o.options.customModelTemplate,
 			Options:  ollamaOptions,
+			Context:  chatContext,
 			Stream:   func(b bool) *bool { return &b }(opts.StreamingFunc != nil),
 		}
 
@@ -151,10 +146,6 @@ func (o *LLM) CreateEmbedding(ctx context.Context, inputTexts []string) ([][]flo
 	}
 
 	return embeddings, nil
-}
-
-func (o *LLM) GeneratePrompt(ctx context.Context, prompts []schema.PromptValue, options ...llms.CallOption) (llms.LLMResult, error) { //nolint:lll
-	return llms.GeneratePrompt(ctx, o, prompts, options...)
 }
 
 func (o *LLM) GetNumTokens(text string) int {
