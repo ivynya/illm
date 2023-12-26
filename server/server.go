@@ -53,6 +53,11 @@ func main() {
 				break
 			}
 
+			// No tag means won't be sent to any client
+			if req.Tag == "" {
+				continue
+			}
+
 			// Relay message to client with matching tag
 			err = broadcastToClient(clients, req)
 			if err != nil {
