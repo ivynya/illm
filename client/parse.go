@@ -15,8 +15,9 @@ func decodeRequest(message []byte) (*internal.Request, error) {
 	return req, nil
 }
 
-func encodeRequest(action string, data string) ([]byte, error) {
+func encodeRequest(tag string, action string, data string) ([]byte, error) {
 	resp := &internal.Request{
+		Tag:    tag,
 		Action: action,
 		Data:   data,
 	}

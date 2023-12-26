@@ -21,7 +21,7 @@ func generate(c *websocket.Conn, req *internal.Request) ([]*llms.Generation, err
 		req.Generate.Context,
 		llms.WithTemperature(0.8),
 		llms.WithStreamingFunc(func(ctx context.Context, chunk []byte) error {
-			resp, err := encodeRequest("response", string(chunk))
+			resp, err := encodeRequest(req.Tag, "response", string(chunk))
 			if err != nil {
 				log.Fatal(err)
 			}

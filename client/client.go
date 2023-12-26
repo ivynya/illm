@@ -15,8 +15,8 @@ func main() {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
 
-	// authorize to an illm server provider
-	u := url.URL{Scheme: "wss", Host: "io.ivy.direct", Path: "/aura"}
+	// authorize to an illm relay as a provider
+	u := url.URL{Scheme: "wss", Host: "io.ivy.direct", Path: "/aura/provider"}
 	log.Printf("connecting to %s", u.String())
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), http.Header{
 		"Authorization": []string{"Basic aXZ5LWF1cmEtYWRtaW46R21XNlhkOHZoVWhLM1hrQVJoNFo="},
