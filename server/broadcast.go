@@ -21,6 +21,10 @@ func broadcastToProvider(c map[string]*websocket.Conn, req *internal.Request) er
 		return err
 	}
 
+	if len(c) == 0 {
+		return nil
+	}
+
 	pick := rand.Intn(len(c))
 	for _, provider := range c {
 		if pick == 0 {
@@ -39,6 +43,10 @@ func broadcastToClient(c map[string]*websocket.Conn, req *internal.Request) erro
 	data, err := json.Marshal(req)
 	if err != nil {
 		return err
+	}
+
+	if c[req.Tag] == nil {
+		return nil
 	}
 
 	err = c[req.Tag].WriteMessage(websocket.TextMessage, data)
