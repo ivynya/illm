@@ -72,11 +72,10 @@ func read(c *websocket.Conn, done chan struct{}) {
 			log.Println("decode:", err)
 			return
 		}
-		log.Printf("recv: %s", req.Action)
+		log.Printf("recv: %s (tag %s)", req.Action, req.Tag)
 
 		switch req.Action {
 		case "generate":
-			log.Println("generate")
 			completion, err := generate(c, req)
 			if err != nil {
 				log.Println("generate:", err)
