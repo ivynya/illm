@@ -48,25 +48,34 @@ func broadcastToClient(c map[string]*websocket.Conn, req *internal.Request) erro
 	return nil
 }
 
-func broadcastAll(c map[string]*websocket.Conn, req *internal.Request) error {
+// broadcast to all connections and return false if >= 1 failure
+func broadcastAll(c map[string]*websocket.Conn, req *internal.Request) bool {
 	data, _ := json.Marshal(req)
 
+	ok := true
 	for tag, conn := range c {
 		err := conn.WriteMessage(websocket.TextMessage, data)
 		if err != nil {
 			delete(c, tag)
-			return err
+			ok = false
 		}
 	}
-	return nil
+	return ok
 }
 
-func updateConnCount(clientType string, c *map[string]*websocket.Conn) {
-	err := broadcastAll(*c, &internal.Request{
-		Action: clientType,
-		Data:   strconv.Itoa(len(*c)),
-	})
-	if err != nil {
-		updateConnCount(clientType, c)
+// broadcast number of clients and providers to all clients
+func broadcastConnectionStats(clients map[string]*websocket.Conn, providers map[string]*websocket.Conn) {
+	retry_remaining := 3
+	ok := true
+	for ok != true && retry_remaining > 0 {
+		ok = ok && broadcastAll(clients, &internal.Request{
+			Action: "clients",
+			Data:   strconv.Itoa(len(clients)),
+		})
+		ok = ok && broadcastAll(clients, &internal.Request{
+			Action: "providers",
+			Data:   strconv.Itoa(len(providers)),
+		})
+		retry_remaining--
 	}
 }

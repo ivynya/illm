@@ -35,7 +35,7 @@ func main() {
 		// Log join message
 		fmt.Println("Provider joined from " + c.RemoteAddr().String())
 		fmt.Println("Total providers:", len(providers))
-		updateConnCount("providers", &providers)
+		broadcastConnectionStats(clients, providers)
 
 		for {
 			// Read message from provider
@@ -69,7 +69,7 @@ func main() {
 
 		// Unregister provider
 		delete(providers, tag)
-		updateConnCount("providers", &providers)
+		broadcastConnectionStats(clients, providers)
 	}))
 
 	// WebSocket endpoint
@@ -81,10 +81,10 @@ func main() {
 		}
 		clients[tag] = c
 
-		// Log join message
+		// Log join message and broadcast counts
 		fmt.Println("Client joined from " + c.RemoteAddr().String())
 		fmt.Println("Total clients:", len(clients))
-		updateConnCount("clients", &clients)
+		broadcastConnectionStats(clients, providers)
 
 		for {
 			// Read message from client
@@ -118,7 +118,7 @@ func main() {
 
 		// Unregister client
 		delete(clients, tag)
-		updateConnCount("clients", &clients)
+		broadcastConnectionStats(clients, providers)
 	}))
 
 	// Start the server
