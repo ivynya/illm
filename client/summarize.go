@@ -20,7 +20,7 @@ func summarize(c *websocket.Conn, req *internal.Request) (bool, error) {
 		return false, err
 	}
 
-	req.Generate.Prompt = "Summarize the following video. Title the summary with the exact video title as a small markdown header. The video information is as follows: " + video.Title + "\n\n" + transcript.String() + "\n\nSummary:"
+	req.Generate.Prompt = "Summarize the following video: " + video.Title + "\n\n" + transcript.String() + "\n\nSummary:"
 	req.Generate.Context = []int{}
 
 	complete, err := generate(c, req)
