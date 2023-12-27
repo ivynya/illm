@@ -95,6 +95,13 @@ func read(c *websocket.Conn, done chan struct{}) {
 				return
 			}
 			err = c.WriteMessage(websocket.TextMessage, res)
+		case "summarize-youtube":
+			complete, err := summarize(c, req)
+			if err != nil {
+				log.Println("summarize:", err)
+				return
+			}
+			_ = complete
 		}
 	}
 }
