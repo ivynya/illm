@@ -4,12 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/websocket/v2"
 	"github.com/ivynya/illm/internal"
 	gonanoid "github.com/matoous/go-nanoid/v2"
+)
+
+var (
+	username = os.Getenv("USERNAME")
+	password = os.Getenv("PASSWORD")
 )
 
 func main() {
@@ -19,7 +25,7 @@ func main() {
 	app := fiber.New()
 	app.Use(basicauth.New(basicauth.Config{
 		Users: map[string]string{
-			"ivy-aura-admin": "GmW6Xd8vhUhK3XkARh4Z",
+			username: password,
 		},
 	}))
 

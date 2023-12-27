@@ -13,8 +13,11 @@ import (
 
 // global environment variables
 var (
-	auth       = os.Getenv("AUTH")
-	identifier = os.Getenv("IDENTIFIER")
+	auth        = os.Getenv("AUTH")
+	identifier  = os.Getenv("IDENTIFIER")
+	illm_scheme = os.Getenv("ILLM_SCHEME")
+	illm_host   = os.Getenv("ILLM_HOST")
+	illm_path   = os.Getenv("ILLM_PATH")
 )
 
 func main() {
@@ -22,7 +25,7 @@ func main() {
 	signal.Notify(interrupt, os.Interrupt)
 
 	// authorize to an illm relay as a provider
-	u := url.URL{Scheme: "wss", Host: "io.ivy.direct", Path: "/aura/provider"}
+	u := url.URL{Scheme: illm_scheme, Host: illm_host, Path: illm_path}
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), http.Header{
 		"Authorization": []string{"Basic " + auth},
 	})
