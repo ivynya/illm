@@ -18,6 +18,7 @@ var (
 	illm_scheme = os.Getenv("ILLM_SCHEME")
 	illm_host   = os.Getenv("ILLM_HOST")
 	illm_path   = os.Getenv("ILLM_PATH")
+	ollama_url  = os.Getenv("OLLAMA_URL")
 )
 
 func main() {

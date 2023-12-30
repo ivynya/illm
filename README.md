@@ -52,6 +52,7 @@ services:
       - ILLM_SCHEME=<ws|wss>
       - ILLM_HOST=illm.example.com
       - ILLM_PATH=/aura/provider
+      - OLLAMA_URL=http://host.docker.internal:11434
 ```
 
 Run the server first, then the client. The client should log that it is connected. Then, if you don't want to write your own user interface, set up [Aura](https://github.com/ivynya/aura) as described in the README. Make sure to pull models before using the user interface because the client will not auto-pull them for you, it will just error.

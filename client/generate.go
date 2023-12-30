@@ -11,7 +11,7 @@ import (
 )
 
 func generate(c *websocket.Conn, req *internal.Request) ([]*llms.Generation, error) {
-	llm, err := ollama.New(ollama.WithModel(req.Generate.Model), ollama.WithServerURL("http://host.docker.internal:11434"))
+	llm, err := ollama.New(ollama.WithModel(req.Generate.Model), ollama.WithServerURL(ollama_url))
 	if err != nil {
 		log.Fatal(err)
 	}
